@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <title>Próxima etapa</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main id="app">
+  <header class="topbar">
+    <a class="brand" href="index.html"><span class="brand-main">food</span><span class="brand-tag">PAGO</span></a>
+    <div class="security-badge"><span class="security-icon">✓</span><span><strong>Ambiente protegido</strong><small>Página independente</small></span></div>
+  </header>
+  <div class="red-line"></div>
+
+  <section class="vsl-page">
+    <div class="program-pill"><span class="shield">✓</span><strong>Próxima etapa</strong></div>
+    <div class="vsl-copy"><h1><span id="vslFirstName">Olá</span>, assista ao vídeo abaixo</h1><p>Esta página é provisória. O vídeo e o botão serão configurados na próxima etapa.</p></div>
+    <div class="video-placeholder"><span class="play">▶</span><strong>Espaço para a VSL</strong><small>Player a ser incorporado</small></div>
+    <button class="primary-button" type="button" disabled>BOTÃO DA VSL — EM CONFIGURAÇÃO</button>
+  </section>
+</main>
+<script>
+  const saved = localStorage.getItem("lead_first_name") || "Olá";
+  document.getElementById("vslFirstName").textContent = saved;
+  document.getElementById("clock").textContent = new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
+</script>
+</body>
+</html>
