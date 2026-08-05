@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <title>Food Pago — Segunda VSL</title>
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    .delayed-vsl2-button{
+      display:none;
+      opacity:0;
+      transform:translateY(12px);
+    }
+
+    .delayed-vsl2-button.visible{
+      display:flex;
+      animation:showVsl2Button .42s ease forwards;
+    }
+
+    @keyframes showVsl2Button{
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+  </style>
+
+</head>
+<body>
+<main id="app">
+  <header class="topbar">
+    <a class="brand" href="etapa1.html"><span class="brand-main food-name">Food</span>
+        <span class="brand-tag">PAGO</span></a>
+    <div class="security-badge"><span class="security-icon">✓</span><span><strong>Ambiente protegido</strong><small>Página independente</small></span></div>
+  </header>
+  <div class="red-line"></div>
+
+  <section class="vsl-page">
+<div class="vsl-copy"><h1><span id="vslFirstName">Olá</span>, assista para solicitar corretamente seu crédito iFood.</h1><p>Assista ao vídeo até o final para entender como continuar sua solicitação.</p></div>
+    <div class="video-placeholder"><span class="play">▶</span><strong>Espaço para a VSL</strong><small>Player a ser incorporado</small></div>
+    <a class="primary-button link-button delayed-vsl2-button" id="vsl2DelayedButton" href="etapa2.html">CONTINUAR PARA SOLICITAR O CRÉDITO <span>→</span></a>
+  </section>
+</main>
+<script>
+    const savedName = sessionStorage.getItem("lead_first_name") || "Olá";
+    document.getElementById("vslFirstName").textContent = savedName;
+
+    // Tempo provisório para teste. Depois alteramos para o tempo real da VSL.
+    const vsl2ButtonDelayInSeconds = 10;
+
+    window.setTimeout(() => {
+      document.getElementById("vsl2DelayedButton").classList.add("visible");
+    }, vsl2ButtonDelayInSeconds * 1000);
+  </script>
+</body>
+</html>
