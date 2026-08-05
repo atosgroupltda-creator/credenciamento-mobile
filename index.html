@@ -50,52 +50,7 @@
     .funnel-headline .highlight{
       color:var(--red);
     }
-
-    .video-entry{
-      position:relative;
-      width:100%;
-      aspect-ratio:9/16;
-      max-height:650px;
-      border-radius:22px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      gap:13px;
-      color:#fff;
-      background:
-        radial-gradient(circle at 50% 45%,rgba(255,255,255,.035),transparent 35%),
-        linear-gradient(145deg,#181b21,#24272e);
-      box-shadow:0 15px 34px rgba(18,23,32,.16);
-      text-align:center;
-      text-decoration:none;
-      overflow:hidden;
-    }
-
-    .play-button{
-      width:76px;
-      height:76px;
-      border-radius:50%;
-      display:grid;
-      place-items:center;
-      padding-left:5px;
-      background:var(--red);
-      box-shadow:0 12px 24px rgba(237,16,16,.3);
-      font-size:31px;
-    }
-
-    .video-entry strong{
-      margin-top:8px;
-      font-size:18px;
-    }
-
-    .video-entry small{
-      color:#d6dae2;
-      font-size:13px;
-    }
-
-
-    .delayed-button{
+.delayed-button{
       width:100%;
       min-height:58px;
       margin-top:18px;
@@ -167,17 +122,30 @@
       <span class="highlight">50 a 70 reais por dia</span>
     </h1>
 
-    <div class="video-entry" id="videoArea" aria-label="Espaço da VSL">
-      <span class="play-button">▶</span>
-      <strong>Assista ao vídeo abaixo</strong>
-      <small>Player a ser incorporado</small>
+    <div class="vsl-embed-wrapper">
+      <vturb-smartplayer
+        id="vid-6a73ab1f5c75cb7be4585335"
+        style="display:block;margin:0 auto;width:100%;max-width:400px;">
+        <div
+          class="vturb-player-placeholder"
+          style="position:relative;width:100%;padding:177.77777777777777% 0 0;z-index:0;background-color:black;">
+        </div>
+      </vturb-smartplayer>
     </div>
 
-    <a class="delayed-button" id="delayedButton" href="etapa1.html">
+<a class="delayed-button" id="delayedButton" href="etapa1.html">
       Quero ser uma credenciada
       <span>→</span>
     </a>
   </main>
+
+
+  <script type="text/javascript">
+    var s = document.createElement("script");
+    s.src = "https://scripts.converteai.net/80fce7f3-532f-451b-953f-9e75cc12be0e/players/6a73ab1f5c75cb7be4585335/v4/player.js";
+    s.async = true;
+    document.head.appendChild(s);
+  </script>
 
   <script>
     // Tempo provisório para teste. Depois substitua 10 pelo tempo real em segundos.
