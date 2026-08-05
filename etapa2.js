@@ -2,7 +2,8 @@
   "use strict";
 
   const $ = (selector, root = document) => root.querySelector(selector);
-  const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+  const $$ = (selector, root = document) =>
+    [...root.querySelectorAll(selector)];
 
   const screens = $$(".stage-screen");
   const range = $("#creditRange");
@@ -24,29 +25,51 @@
   }
 
   function showToast(message) {
+    if (!toast) return;
+
     toast.textContent = message;
     toast.classList.add("show");
+
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove("show"), 2200);
+
+    toastTimer = setTimeout(() => {
+      toast.classList.remove("show");
+    }, 2200);
   }
 
   function showStage(name, push = true) {
-    const target = screens.find(screen => screen.dataset.stage === name);
+    const target = screens.find(
+      screen => screen.dataset.stage === name
+    );
+
     if (!target) return;
 
-    screens.forEach(screen => screen.classList.toggle("active", screen === target));
+    screens.forEach(screen => {
+      screen.classList.toggle("active", screen === target);
+    });
+
     currentStage = name;
 
-    if (push && stack[stack.length - 1] !== name) stack.push(name);
+    if (push && stack[stack.length - 1] !== name) {
+      stack.push(name);
+    }
 
-    document.querySelector(".stage-back").style.visibility =
-      name === "offer" ? "hidden" : "visible";
+    const backButton = $(".stage-back");
 
-    window.scrollTo({ top: 0, behavior: "instant" });
+    if (backButton) {
+      backButton.style.visibility =
+        name === "offer" ? "hidden" : "visible";
+    }
+
+    window.scrollTo({
+      top: 0,
+      behavior: "instant"
+    });
   }
 
   function goBack() {
     if (stack.length <= 1) return;
+
     stack.pop();
     showStage(stack[stack.length - 1], false);
   }
@@ -57,63 +80,126 @@
 
   function maskPix(value) {
     const clean = String(value || "").trim();
-    if (!clean) return "XXX.XXXX.XXX-XX";
+
+    if (!clean) {
+      return "XXX.XXXX.XXX-XX";
+    }
 
     if (clean.includes("@")) {
       const [user, domain] = clean.split("@");
       const visible = user.slice(0, 2);
-      return `${visible}${"•".repeat(Math.max(3, user.length - 2))}@${domain}`;
+
+      return `${visible}${"•".repeat(
+        Math.max(3, user.length - 2)
+      )}@${domain}`;
     }
 
     const digits = clean.replace(/\D/g, "");
+
     if (digits.length >= 5) {
-      return `${digits.slice(0, 2)}${"•".repeat(Math.max(5, digits.length - 4))}${digits.slice(-2)}`;
+      return `${digits.slice(0, 2)}${"•".repeat(
+        Math.max(5, digits.length - 4)
+      )}${digits.slice(-2)}`;
     }
 
     if (clean.length > 4) {
-      return `${clean.slice(0, 2)}${"•".repeat(clean.length - 4)}${clean.slice(-2)}`;
+      return `${clean.slice(0, 2)}${"•".repeat(
+        clean.length - 4
+      )}${clean.slice(-2)}`;
     }
 
     return "••••";
   }
 
   function saveTemporaryDetails() {
-    sessionStorage.setItem("simulation_amount", range.value);
-    sessionStorage.setItem("simulation_purpose", $("#creditPurpose").value);
-    sessionStorage.setItem("simulation_pix", $("#pixKey").value.trim());
-    sessionStorage.setItem("simulation_bank", $("#bankName").value);
+    sessionStorage.setItem(
+      "simulation_amount",
+      range?.value || "6750"
+    );
+
+    sessionStorage.setItem(
+      "simulation_purpose",
+      $("#creditPurpose")?.value || ""
+    );
+
+    sessionStorage.setItem(
+      "simulation_pix",
+      $("#pixKey")?.value.trim() || ""
+    );
+
+    sessionStorage.setItem(
+      "simulation_bank",
+      $("#bankName")?.value || ""
+    );
   }
 
   function restoreTemporaryDetails() {
-    const savedAmount = sessionStorage.getItem("simulation_amount");
-    if (savedAmount) {
+    const savedAmount =
+      sessionStorage.getItem("simulation_amount");
+
+    if (savedAmount && range && amountLabel) {
       range.value = savedAmount;
       amountLabel.textContent = money(savedAmount);
     }
 
-    $("#creditPurpose").value = sessionStorage.getItem("simulation_purpose") || "";
-    $("#pixKey").value = sessionStorage.getItem("simulation_pix") || "";
-    $("#bankName").value = sessionStorage.getItem("simulation_bank") || "";
+    const purpose = $("#creditPurpose");
+    const pix = $("#pixKey");
+    const bank = $("#bankName");
+
+    if (purpose) {
+      purpose.value =
+        sessionStorage.getItem("simulation_purpose") || "";
+    }
+
+    if (pix) {
+      pix.value =
+        sessionStorage.getItem("simulation_pix") || "";
+    }
+
+    if (bank) {
+      bank.value =
+        sessionStorage.getItem("simulation_bank") || "";
+    }
   }
 
   function validateForm() {
-    let valid = true;
-    const required = [...form.querySelectorAll("[required]")];
+    if (!form) return false;
 
-    required.forEach(field => {
+    let valid = true;
+
+    const requiredFields = [
+      ...form.querySelectorAll("[required]")
+    ];
+
+    requiredFields.forEach(field => {
       const fieldWrap = field.closest(".stage-field");
       const ok = Boolean(field.value.trim());
-      fieldWrap.classList.toggle("invalid", !ok);
-      if (!ok) valid = false;
+
+      if (fieldWrap) {
+        fieldWrap.classList.toggle("invalid", !ok);
+      }
+
+      if (!ok) {
+        valid = false;
+      }
     });
 
-    const pix = $("#pixKey").value.trim();
+    const pixField = $("#pixKey");
     const pixError = $("#pixError");
-    if (pix.length < 5) {
-      $("#pixKey").closest(".stage-field").classList.add("invalid");
-      pixError.textContent = "Digite uma chave com pelo menos 5 caracteres.";
+    const pixValue = pixField?.value.trim() || "";
+
+    if (pixValue.length < 5) {
+      pixField
+        ?.closest(".stage-field")
+        ?.classList.add("invalid");
+
+      if (pixError) {
+        pixError.textContent =
+          "Digite uma chave com pelo menos 5 caracteres.";
+      }
+
       valid = false;
-    } else {
+    } else if (pixError) {
       pixError.textContent = "";
     }
 
@@ -127,48 +213,117 @@
     const analysis = $("#analysisRow");
     const security = $("#securityRow");
 
-    fill.style.width = "8%";
-
-    setTimeout(() => { fill.style.width = "45%"; }, 450);
+    if (fill) {
+      fill.style.width = "8%";
+    }
 
     setTimeout(() => {
-      analysis.classList.remove("running");
-      analysis.classList.add("done");
-      $("small", analysis).textContent = "Verificado";
-      $("b", analysis).className = "";
-      $("b", analysis).textContent = "✓";
+      if (fill) {
+        fill.style.width = "45%";
+      }
+    }, 450);
 
-      security.classList.remove("waiting");
-      security.classList.add("running");
-      $("small", security).textContent = "Em análise";
-      $("b", security).className = "row-loader";
-      $("b", security).textContent = "";
+    setTimeout(() => {
+      if (analysis) {
+        analysis.classList.remove("running");
+        analysis.classList.add("done");
 
-      fill.style.width = "72%";
+        const small = $("small", analysis);
+        const icon = $("b", analysis);
+
+        if (small) {
+          small.textContent = "Verificado";
+        }
+
+        if (icon) {
+          icon.className = "";
+          icon.textContent = "✓";
+        }
+      }
+
+      if (security) {
+        security.classList.remove("waiting");
+        security.classList.add("running");
+
+        const small = $("small", security);
+        const icon = $("b", security);
+
+        if (small) {
+          small.textContent = "Em análise";
+        }
+
+        if (icon) {
+          icon.className = "row-loader";
+          icon.textContent = "";
+        }
+      }
+
+      if (fill) {
+        fill.style.width = "72%";
+      }
     }, 2100);
 
     setTimeout(() => {
-      security.classList.remove("running");
-      security.classList.add("done");
-      $("small", security).textContent = "Verificado";
-      $("b", security).className = "";
-      $("b", security).textContent = "✓";
+      if (security) {
+        security.classList.remove("running");
+        security.classList.add("done");
 
-      fill.style.width = "100%";
+        const small = $("small", security);
+        const icon = $("b", security);
+
+        if (small) {
+          small.textContent = "Verificado";
+        }
+
+        if (icon) {
+          icon.className = "";
+          icon.textContent = "✓";
+        }
+      }
+
+      if (fill) {
+        fill.style.width = "100%";
+      }
     }, 3900);
 
-    setTimeout(showResult, 4800);
+    setTimeout(() => {
+      showResult();
+    }, 4800);
   }
 
   function showResult() {
-    const amount = sessionStorage.getItem("simulation_amount") || range.value;
-    const pix = sessionStorage.getItem("simulation_pix") || "";
-    const bank = sessionStorage.getItem("simulation_bank") || "Não informado";
+    const amount =
+      sessionStorage.getItem("simulation_amount") ||
+      range?.value ||
+      "6750";
 
-    $("#resultName").textContent = firstName();
-    $("#maskedPix").textContent = maskPix(pix);
-    $("#resultAmount").textContent = money(amount);
-    $("#resultBank").textContent = bank;
+    const pix =
+      sessionStorage.getItem("simulation_pix") || "";
+
+    const bank =
+      sessionStorage.getItem("simulation_bank") ||
+      "Não informado";
+
+    const resultName = $("#resultName");
+    const maskedPix = $("#maskedPix");
+    const resultAmount = $("#resultAmount");
+    const resultBank = $("#resultBank");
+
+    if (resultName) {
+      resultName.textContent = firstName();
+    }
+
+    if (maskedPix) {
+      maskedPix.textContent = maskPix(pix);
+    }
+
+    if (resultAmount) {
+      resultAmount.textContent = money(amount);
+    }
+
+    if (resultBank) {
+      resultBank.textContent = bank;
+    }
 
     showStage("result");
     startCountdown();
@@ -176,54 +331,87 @@
 
   function startCountdown() {
     clearInterval(countdownTimer);
+
     let seconds = 60;
-    $("#countdown").textContent = "00:60";
+    const countdown = $("#countdown");
+
+    if (!countdown) return;
+
+    countdown.textContent = "00:60";
 
     countdownTimer = setInterval(() => {
       seconds -= 1;
-      $("#countdown").textContent = `00:${String(Math.max(0, seconds)).padStart(2, "0")}`;
+
+      countdown.textContent =
+        `00:${String(Math.max(0, seconds)).padStart(2, "0")}`;
 
       if (seconds <= 0) {
         clearInterval(countdownTimer);
-        showToast("Tempo visual encerrado. Nenhuma ação foi executada.");
+
+        showToast(
+          "Tempo visual encerrado. Nenhuma ação foi executada."
+        );
       }
     }, 1000);
   }
 
-  range.addEventListener("input", () => {
-    amountLabel.textContent = money(range.value);
-    sessionStorage.setItem("simulation_amount", range.value);
-  });
+  if (range && amountLabel) {
+    range.addEventListener("input", () => {
+      amountLabel.textContent = money(range.value);
+
+      sessionStorage.setItem(
+        "simulation_amount",
+        range.value
+      );
+    });
+  }
 
   document.addEventListener("click", event => {
     const next = event.target.closest("[data-next]");
+
     if (next) {
       showStage(next.dataset.next);
       return;
     }
 
     const back = event.target.closest("[data-back]");
-    if (back) goBack();
-  });
 
-  form.addEventListener("submit", event => {
-    event.preventDefault();
-
-    if (!validateForm()) {
-      form.querySelector(".invalid input, .invalid select")?.focus();
-      showToast("Preencha os campos destacados.");
-      return;
+    if (back) {
+      goBack();
     }
-
-    saveTemporaryDetails();
-    runValidation();
   });
 
-  form.addEventListener("input", event => {
-    event.target.closest(".stage-field")?.classList.remove("invalid");
-    if (event.target.id === "pixKey") $("#pixError").textContent = "";
-  });
+  if (form) {
+    form.addEventListener("submit", event => {
+      event.preventDefault();
 
+      if (!validateForm()) {
+        form
+          .querySelector(".invalid input, .invalid select")
+          ?.focus();
+
+        showToast("Preencha os campos destacados.");
+        return;
+      }
+
+      saveTemporaryDetails();
+      runValidation();
+    });
+
+    form.addEventListener("input", event => {
+      event.target
+        .closest(".stage-field")
+        ?.classList.remove("invalid");
+
+      if (event.target.id === "pixKey") {
+        const pixError = $("#pixError");
+
+        if (pixError) {
+          pixError.textContent = "";
+        }
+      }
+    });
+  }
 
   const policiesModal = $("#policiesModal");
   const openPolicies = $("#openPolicies");
@@ -231,25 +419,46 @@
   const closePoliciesBottom = $("#closePoliciesBottom");
 
   function openPoliciesModal() {
+    if (!policiesModal) return;
+
     policiesModal.hidden = false;
     document.body.style.overflow = "hidden";
   }
 
   function closePoliciesModal() {
+    if (!policiesModal) return;
+
     policiesModal.hidden = true;
     document.body.style.overflow = "";
   }
 
-  openPolicies?.addEventListener("click", openPoliciesModal);
-  closePolicies?.addEventListener("click", closePoliciesModal);
-  closePoliciesBottom?.addEventListener("click", closePoliciesModal);
+  openPolicies?.addEventListener(
+    "click",
+    openPoliciesModal
+  );
+
+  closePolicies?.addEventListener(
+    "click",
+    closePoliciesModal
+  );
+
+  closePoliciesBottom?.addEventListener(
+    "click",
+    closePoliciesModal
+  );
 
   policiesModal?.addEventListener("click", event => {
-    if (event.target === policiesModal) closePoliciesModal();
+    if (event.target === policiesModal) {
+      closePoliciesModal();
+    }
   });
 
   document.addEventListener("keydown", event => {
-    if (event.key === "Escape" && policiesModal && !policiesModal.hidden) {
+    if (
+      event.key === "Escape" &&
+      policiesModal &&
+      !policiesModal.hidden
+    ) {
       closePoliciesModal();
     }
   });
