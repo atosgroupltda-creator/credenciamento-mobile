@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>Food Pago — Etapa 2</title>
+  <link rel="stylesheet" href="styles.css?v=2.0" />
+</head>
+<body>
+  <main id="app" class="stage-two-app">
+    <header class="stage-header">
+      <button class="stage-back" type="button" data-back aria-label="Voltar">←</button>
+      <a class="brand stage-brand" href="index.html" aria-label="Início">
+        <span class="brand-main food-name">Food</span>
+        <span class="brand-tag">PAGO</span>
+      </a>
+      <div class="stage-security">
+        <span>✓</span>
+        <small>Ambiente protegido</small>
+      </div>
+    </header>
+<!-- TELA 1 -->
+    <section class="stage-screen active" data-stage="offer">
+      <div class="stage-content offer-screen">
+        <div class="wallet-art" aria-hidden="true">
+          <span class="bill b1"></span>
+          <span class="bill b2"></span>
+          <span class="coin">R$</span>
+          <span class="wallet-body">✓</span>
+          <i class="spark p1"></i><i class="spark p2"></i><i class="spark p3"></i><i class="spark p4"></i>
+        </div>
+
+        <div class="offer-copy">
+          <h1>Crédito<br><span>pré-aprovado!</span></h1>
+          <p>Você tem um crédito pré-aprovado de até:</p>
+          <strong class="max-credit">R$ 10.740,00</strong>
+        </div>
+
+        <div class="safe-card">
+          <span class="safe-shield">✓</span>
+          <div><strong>Ambiente protegido</strong><small>Seus dados permanecem nesta aba</small></div>
+        </div>
+
+        <button class="stage-primary" type="button" data-next="amount">
+          SOLICITAR AGORA <span>→</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- TELA 2 -->
+    <section class="stage-screen" data-stage="amount">
+      <div class="stage-content amount-screen">
+        <div class="mini-safe">
+          <span>✓</span>
+          <div><strong>Ambiente protegido</strong><small>Seus dados permanecem nesta sessão</small></div>
+        </div>
+
+        <div class="stage-title">
+          <h1>Escolha o valor<br>que deseja solicitar</h1>
+          <p>Arraste o botão para escolher um valor entre R$ 1.000 e R$ 10.740</p>
+        </div>
+
+        <div class="amount-box" id="selectedAmount">R$ 6.750,00</div>
+
+        <div class="range-labels">
+          <span>R$ 1.000</span>
+          <span>R$ 10.740</span>
+        </div>
+        <input
+          class="credit-range"
+          id="creditRange"
+          type="range"
+          min="1000"
+          max="10740"
+          step="50"
+          value="6750"
+          aria-label="Valor do crédito"
+        />
+
+        <button class="stage-primary push-bottom" type="button" data-next="details">
+          CONTINUAR <span>→</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- TELA 3 -->
+    <section class="stage-screen" data-stage="details">
+      <form class="stage-content details-screen" id="stageTwoForm" novalidate>
+        <div class="stage-title compact-title">
+          <h1>Para continuar, preencha<br>os dados abaixo</h1>
+        </div>
+
+        <label class="stage-field">
+          <span class="field-question"><i>♙</i> Esse valor seria para:</span>
+          <select id="creditPurpose" required>
+            <option value="">Selecione uma opção</option>
+            <option>Organizar as finanças</option>
+            <option>Investir em um negócio</option>
+            <option>Reformar a casa</option>
+            <option>Educação ou cursos</option>
+            <option>Outra finalidade</option>
+          </select>
+        </label>
+
+        <label class="stage-field">
+          <span class="field-question"><i>▣</i> Qual chave Pix você quer cadastrar para receber o valor?</span>
+          <input
+            id="pixKey"
+            type="text"
+            autocomplete="off"
+            placeholder="Digite sua chave Pix"
+            required
+          />
+          <small class="stage-error" id="pixError"></small>
+        </label>
+
+        <label class="stage-field">
+          <span class="field-question"><i>▥</i> Qual banco você prefere para receber o valor?</span>
+          <select id="bankName" required>
+            <option value="">Selecione seu banco</option>
+            <option>Nubank</option>
+            <option>Banco do Brasil</option>
+            <option>Caixa Econômica</option>
+            <option>Bradesco</option>
+            <option>Itaú</option>
+            <option>Santander</option>
+            <option>Inter</option>
+            <option>Mercado Pago</option>
+            <option>Outro banco</option>
+          </select>
+        </label>
+<button class="stage-primary push-bottom" type="submit">
+          ENVIAR PARA ANÁLISE <span>→</span>
+        </button>
+      </form>
+    </section>
+
+    <!-- TELA 4 -->
+    <section class="stage-screen" data-stage="validation">
+      <div class="stage-content validation-screen">
+        <div class="clipboard-art">
+          <span class="clip"></span>
+          <div class="paper">
+            <i></i><i></i>
+            <b class="circle-progress"></b>
+          </div>
+          <span class="validation-shield">✓</span>
+        </div>
+
+        <div class="stage-title validation-copy">
+          <h1>Validando seus dados...</h1>
+          <p>Estamos preparando suas informações.</p>
+        </div>
+
+        <div class="validation-list">
+          <div class="validation-row done">
+            <span class="validation-icon">♙</span>
+            <div><strong>Dados pessoais</strong><small>Verificado</small></div>
+            <b>✓</b>
+          </div>
+          <div class="validation-row done">
+            <span class="validation-icon">▥</span>
+            <div><strong>Dados bancários / Pix</strong><small>Verificado</small></div>
+            <b>✓</b>
+          </div>
+          <div class="validation-row running" id="analysisRow">
+            <span class="validation-icon">▥</span>
+            <div><strong>Análise do valor</strong><small>Em análise</small></div>
+            <b class="row-loader"></b>
+          </div>
+          <div class="validation-row waiting" id="securityRow">
+            <span class="validation-icon">✓</span>
+            <div><strong>Verificação de segurança</strong><small>Aguardando</small></div>
+            <b class="row-loader muted"></b>
+          </div>
+        </div>
+
+        <div class="validation-progress">
+          <div><span id="validationFill"></span></div>
+          <p>Isso pode levar alguns segundos.<br>Por favor, aguarde.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TELA 5 -->
+    <section class="stage-screen" data-stage="result">
+      <div class="stage-content result-screen">
+        <div class="countdown-area">
+          <span class="timer-icon">◷</span>
+          <small>TEMPO RESTANTE</small>
+          <strong id="countdown">00:60</strong>
+          <span>segundos</span>
+        </div>
+
+        <article class="result-card">
+          <span class="result-check">✓</span>
+          <h1>Obrigado pelo cadastro, <span id="resultName">Visitante</span>!</h1>
+          <p>Sua solicitação está quase concluída.</p>
+          <hr>
+          <p>O valor selecionado foi associado à chave Pix informada:</p>
+          <div class="pix-summary">
+            <span class="pix-symbol">◆</span>
+            <div><strong id="maskedPix">XXX.XXXX.XXX-XX</strong><small>Chave Pix</small></div>
+          </div>
+          <div class="result-meta">
+            <span><small>Valor escolhido</small><strong id="resultAmount">R$ 6.750,00</strong></span>
+            <span><small>Banco</small><strong id="resultBank">Nubank</strong></span>
+          </div>
+        </article>
+<button class="stage-primary final-disabled" type="button" disabled>
+          CONCLUIR VALIDAÇÃO AGORA <span>→</span>
+        </button>
+</div>
+    </section>
+
+
+    <div class="simulation-footnote">
+      Simulação educacional — nenhuma operação financeira é realizada.
+    </div>
+
+    <div class="stage-toast" id="stageToast" role="status" aria-live="polite"></div>
+  </main>
+
+  <script src="etapa2.js?v=2.0"></script>
+</body>
+</html>
